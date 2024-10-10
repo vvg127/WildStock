@@ -1,0 +1,4 @@
+name: WildStock
+version: '1.0-SNAPSHOT'
+main: org.stocks.wildStock.WildStock
+api-version: '1.21'
