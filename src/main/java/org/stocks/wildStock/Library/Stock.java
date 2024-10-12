@@ -6,7 +6,6 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -22,7 +21,8 @@ public class Stock {
     private final String name;
     private final Material icon;
     private int price = 1000;
-    public Map<UUID, Integer> amounts = new HashMap<>();
+    private boolean closed = false;
+    private final Map<UUID, Integer> amounts = new HashMap<>();
 
     public int getChange() {return change;}
 
@@ -36,7 +36,12 @@ public class Stock {
 
     public void setPrice(int price) {this.price = price;}
 
-    public void resetPrice() {price = 1000;}
+    public boolean isClosed() {return closed;}
+
+    public void setClosed(boolean closed) {
+        this.closed = closed;
+        if (closed) {price = 1000;}
+    }
 
     public int getAmount(UUID uuid) {
         if (!amounts.containsKey(uuid)) {

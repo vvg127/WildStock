@@ -25,4 +25,12 @@ public class Data {
 
     public static void setMoney(UUID uuid, int amount) {money.put(uuid, amount);}
 
+    public static void addMoney(UUID uuid, int amount) {
+        setMoney(uuid, getMoney(uuid) + amount);
+    }
+
+    //TODO 세이브, 로드 메서드 미구현
+    public static void save() {}
+    public static void load() {}
+
 }
