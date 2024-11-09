@@ -34,6 +34,7 @@ public class Convert implements Listener {
     public void ItemGet(EntityPickupItemEvent e) {
         if (e.getEntity() instanceof Player p) {
             ItemStack item = e.getItem().getItemStack();
+            if (item.getItemMeta().hasEnchants()) {return;}
 
             if (getPrice(item.getType()) != 0) {
                 Data.addMoney(p.getUniqueId(), getPrice(item.getType()) * item.getAmount());
@@ -52,7 +53,7 @@ public class Convert implements Listener {
             if (in == null) {return;}
 
             ItemStack item = e.getCurrentItem();
-            if (item == null) {return;}
+            if (item == null || item.getItemMeta().hasEnchants()) {return;}
 
             if (e.getSlotType() == InventoryType.SlotType.RESULT) {return;}
 

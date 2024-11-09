@@ -22,6 +22,12 @@ public class Change extends BukkitRunnable {
 
     @Override
     public void run() {
+
+        if (!running) {
+            cancel();
+            return;
+        }
+
         for (Stock stock : Data.stocks) {
             if (stock.isClosed()) {
                 stock.setClosed(false);
@@ -52,10 +58,9 @@ public class Change extends BukkitRunnable {
         task.runTaskTimer(JavaPlugin.getPlugin(WildStock.class),0L,240 * 20);
     }
 
-    public void stopTask() {
-        Change task = new Change();
+    public static void stopTask() {
+        if (!running) {return;}
         running = false;
-        task.cancel();
     }
 
 }
