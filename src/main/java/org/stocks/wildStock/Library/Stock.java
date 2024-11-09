@@ -21,10 +21,15 @@ public class Stock {
     private final String name;
     private final Material icon;
     private int price = 1000;
+    private boolean xTen = false;
     private boolean closed = false;
     private final Map<UUID, Integer> amounts = new HashMap<>();
 
-    public int getChange() {return change;}
+    public int getChange() {return (xTen) ? change : change * 10;}
+
+    public void setXTen(boolean xTen) {this.xTen =xTen;}
+
+    public boolean isXTen() {return xTen;}
 
     public String getName() {return name;}
 

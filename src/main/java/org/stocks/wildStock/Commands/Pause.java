@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.stocks.wildStock.Stock.Change;
+import org.stocks.wildStock.Stock.Speed;
 
 public class Pause implements CommandExecutor {
     @Override
@@ -18,14 +19,33 @@ public class Pause implements CommandExecutor {
 
         if (Change.isRunning()) {
             Change.stopTask();
-            commandSender.sendMessage(
+            commandSender.getServer().broadcast(
                     Component.text("주식 변동이 정지되었습니다!"
                             , Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
+
         } else {
-            Change.startTask();
-            commandSender.sendMessage(
-                    Component.text("주식 변동이 재시작되었습니다!"
-                            , Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
+            if (Speed.hasTarget()) {
+                if (Speed.isRunning()) {
+                    Speed.stopMode();
+                    commandSender.getServer().broadcast(
+                            Component.text("주식 변동이 정지되었습니다! (초고속 모드)"
+                                    , Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
+
+                } else {
+                    Speed.startMode();
+                    commandSender.getServer().broadcast(
+                            Component.text("주식 변동이 재시작되었습니다! (초고속 모드)"
+                                    , Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
+
+                }
+
+            } else {
+                Change.startTask();
+                commandSender.getServer().broadcast(
+                        Component.text("주식 변동이 재시작되었습니다!"
+                                , Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
+
+            }
         }
 
         if (commandSender instanceof Player) {

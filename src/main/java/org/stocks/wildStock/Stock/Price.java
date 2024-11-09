@@ -6,29 +6,20 @@ import org.stocks.wildStock.Library.Data;
 import org.stocks.wildStock.Library.Stock;
 import org.stocks.wildStock.WildStock;
 
-public class Speed extends BukkitRunnable {
+public class Price extends BukkitRunnable {
 
     private static int target;
     private static boolean running;
 
-    public static boolean isRunning() {return running;}
-    public static boolean hasTarget() {return target != 0;}
-
     @Override
     public void run() {
         if (target <= 0 || !running) {
+            for (Stock stock : Data.stocks) {
+                stock.setXTen(false);
+            }
             cancel();
             running = false;
             return;
-        }
-
-        for (Stock stock : Data.stocks) {
-            if (stock.isClosed()) {
-                stock.setClosed(false);
-            } else {
-                int value = (int) (Math.random() * stock.getChange()) * (((int) (Math.random() * 2) == 1) ? 1 : -1);
-                stock.setPrice(Math.max(value, 0));
-            }
         }
 
         target--;
@@ -36,22 +27,26 @@ public class Speed extends BukkitRunnable {
     }
 
     public static void startMode() {
-        if (running) {return;}
-        Speed task = new Speed();
+        if (running || target <= 0) {return;}
+        Price task = new Price();
         running = true;
-        task.runTaskTimerAsynchronously(JavaPlugin.getPlugin(WildStock.class),0L,2);
-        Price.startMode();
+        task.runTaskTimerAsynchronously(JavaPlugin.getPlugin(WildStock.class),0L,20);
+        for (Stock stock : Data.stocks) {
+            stock.setXTen(true);
+        }
     }
 
     public static void stopMode() {
         if (!running) {return;}
         running = false;
-        Price.stopMode();
+        for (Stock stock : Data.stocks) {
+            stock.setXTen(false);
+        }
     }
 
-    /** amount 1당 10회 (1초) */
+    /** amount 1당 1초 */
     public static void addTarget(int amount) {
-        target += amount * 10;
+        target += amount;
         if (target < 0) {target = 0;}
     }
 

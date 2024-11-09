@@ -25,6 +25,7 @@ public class Change extends BukkitRunnable {
 
         if (!running) {
             cancel();
+            running = false;
             return;
         }
 
@@ -56,11 +57,13 @@ public class Change extends BukkitRunnable {
         Change task = new Change();
         running = true;
         task.runTaskTimer(JavaPlugin.getPlugin(WildStock.class),0L,240 * 20);
+        Price.startMode();
     }
 
     public static void stopTask() {
         if (!running) {return;}
         running = false;
+        Price.stopMode();
     }
 
 }
