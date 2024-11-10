@@ -1,6 +1,8 @@
 package org.stocks.wildStock;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import org.stocks.wildStock.Commands.Menu;
+import org.stocks.wildStock.Commands.Shop;
 import org.stocks.wildStock.Library.Data;
 import org.stocks.wildStock.Stock.Change;
 
@@ -11,6 +13,12 @@ public final class WildStock extends JavaPlugin {
         // Plugin startup logic
         Data.load();
         Change.startTask();
+
+        getServer().getPluginManager().registerEvents(new Menu(), this);
+        getServer().getPluginManager().registerEvents(new Shop(), this);
+
+        getCommand("주식").setExecutor(new Menu());
+        getCommand("상점").setExecutor(new Shop());
     }
 
     @Override

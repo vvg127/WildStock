@@ -2,3 +2,12 @@ name: WildStock
 version: '1.0-SNAPSHOT'
 main: org.stocks.wildStock.WildStock
 api-version: '1.21'
+commands:
+  주식:
+    description: 주식 창을 엽니다.
+    usage: /<command>
+
+  상점:
+    description: 상점 창을 엽니다.
+    usage: /<command>
+
