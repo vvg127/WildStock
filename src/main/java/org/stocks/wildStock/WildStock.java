@@ -17,8 +17,8 @@ public final class WildStock extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new Menu(), this);
         getServer().getPluginManager().registerEvents(new Shop(), this);
 
-        getCommand("주식").setExecutor(new Menu());
-        getCommand("상점").setExecutor(new Shop());
+        getCommand("stock").setExecutor(new Menu());
+        getCommand("shop").setExecutor(new Shop());
     }
 
     @Override

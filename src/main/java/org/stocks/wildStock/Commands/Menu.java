@@ -21,12 +21,15 @@ public class Menu implements CommandExecutor, Listener {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
 
-        if (commandSender instanceof Player p) {
-            Inventory inventory = Bukkit.createInventory(p, 54, Component.text("주식",
-                    Style.style(TextColor.color(0, 0, 0), TextDecoration.ITALIC.withState(false))));
-            p.openInventory(inventory);
+        if (command.getName().equals("stock")) {
 
-            p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BELL, 1, 1);
+            if (commandSender instanceof Player p) {
+                Inventory inventory = Bukkit.createInventory(p, 54, Component.text("주식",
+                        Style.style(TextColor.color(0, 0, 0), TextDecoration.ITALIC.withState(false))));
+                p.openInventory(inventory);
+
+                p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BELL, 1, 1);
+            }
         }
 
         return true;

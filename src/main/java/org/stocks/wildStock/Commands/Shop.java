@@ -32,26 +32,28 @@ public class Shop implements CommandExecutor, Listener {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
 
-        if (commandSender instanceof Player p) {
-            Inventory inventory = Bukkit.createInventory(p, 54, Component.text("상점",
-                    Style.style(TextColor.color(0, 0, 0), TextDecoration.ITALIC.withState(false))));
-            p.openInventory(inventory);
+        if (command.getName().equals("shop")) {
+            if (commandSender instanceof Player p) {
+                Inventory inventory = Bukkit.createInventory(p, 54, Component.text("상점",
+                        Style.style(TextColor.color(0, 0, 0), TextDecoration.ITALIC.withState(false))));
+                p.openInventory(inventory);
 
-            ItemStack money = new ItemStack(Material.SUNFLOWER);
-            ItemMeta meta = money.getItemMeta();
-            ArrayList<Component> list = new ArrayList<>();
+                ItemStack money = new ItemStack(Material.SUNFLOWER);
+                ItemMeta meta = money.getItemMeta();
+                ArrayList<Component> list = new ArrayList<>();
 
-            list.add(Component.text(Data.getMoney(p.getUniqueId()) + " 원", Style.style(TextColor.color(255, 191, 0), TextDecoration.ITALIC.withState(false))));
-            meta.lore(list);
-            list.clear();
-            meta.displayName(Component.text("보유 자금", Style.style(TextColor.color(0, 0, 0), TextDecoration.ITALIC.withState(false))));
-            money.setItemMeta(meta);
-            inventory.setItem(5, money);
+                list.add(Component.text(Data.getMoney(p.getUniqueId()) + " 원", Style.style(TextColor.color(255, 191, 0), TextDecoration.ITALIC.withState(false))));
+                meta.lore(list);
+                list.clear();
+                meta.displayName(Component.text("보유 자금", Style.style(TextColor.color(0, 0, 0), TextDecoration.ITALIC.withState(false))));
+                money.setItemMeta(meta);
+                inventory.setItem(5, money);
 
-            //TODO meta랑 list는 재활용
+                //TODO meta 랑 list 는 재활용
 
 
-            p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BELL, 1, 1);
+                p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BELL, 1, 1);
+            }
         }
 
         return true;
