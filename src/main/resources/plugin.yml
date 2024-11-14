@@ -9,4 +9,6 @@ commands:
   shop:
     description: 상점 창을 엽니다.
     usage: /<command>
-
+  pause:
+    description: 주식 변동을 정지/재시작 합니다.
+    usage: /<command>

@@ -27,7 +27,7 @@ public class Speed extends BukkitRunnable {
                 stock.setClosed(false);
             } else {
                 int value = (int) (Math.random() * stock.getChange()) * (((int) (Math.random() * 2) == 1) ? 1 : -1);
-                stock.setPrice(Math.max(value, 0));
+                stock.setPrice(Math.max(stock.getPrice() - value, 0));
             }
         }
 
@@ -39,7 +39,7 @@ public class Speed extends BukkitRunnable {
         if (running) {return;}
         Speed task = new Speed();
         running = true;
-        task.runTaskTimerAsynchronously(JavaPlugin.getPlugin(WildStock.class),0L,2);
+        task.runTaskTimerAsynchronously(JavaPlugin.getPlugin(WildStock.class),2L,2);
         Price.startMode();
     }
 

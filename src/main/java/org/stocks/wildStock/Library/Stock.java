@@ -2,12 +2,11 @@ package org.stocks.wildStock.Library;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class Stock {
 
@@ -24,6 +23,7 @@ public class Stock {
     private boolean xTen = false;
     private boolean closed = false;
     private final Map<UUID, Integer> amounts = new HashMap<>();
+    private final List<Integer> logs = new ArrayList<>();
 
     public int getChange() {return (xTen) ? change : change * 10;}
 
@@ -39,21 +39,69 @@ public class Stock {
 
     public int getPrice() {return price;}
 
-    public void setPrice(int price) {this.price = price;}
+    public void setPrice(int price) {
+        logs.add(this.price);
+        //if (logs.size() > 6) {logs.removeFirst();}
+        this.price = price;
+    }
 
     public boolean isClosed() {return closed;}
 
     public void setClosed(boolean closed) {
         this.closed = closed;
-        if (closed) {price = 1000;}
+        price = 1000;
+        if (closed) {
+            logs.clear();
+            amounts.clear();
+        }
     }
 
     public int getAmount(UUID uuid) {
         if (!amounts.containsKey(uuid)) {
-            throw new RuntimeException();
+            amounts.put(uuid, 0);
         }
         return amounts.get(uuid);
     }
 
     public void setAmount(UUID uuid, int amount) {amounts.put(uuid, amount);}
+
+    public List<Component> getLore(UUID uuid) {
+        List<Component> lore = new ArrayList<>();
+
+        Component text = Component.text(getPrice(), Style.style(TextColor.color(255, 191, 0), TextDecoration.ITALIC.withState(false)));
+
+        lore.add(Component.text("현재 주가 : ",
+                Style.style(TextColor.color(255, 255, 255),TextDecoration.ITALIC.withState(false))).append(text));
+
+        lore.add(Component.text("보유 주식 : " + getAmount(uuid) + "주", Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
+        lore.add(Component.empty());
+
+        int temp = -1;
+        int count = 0;
+        List<Component> list = new ArrayList<>();
+        for (int num : logs) {
+            if (count == 5) {break;}
+            if (temp == -1) {
+                temp = num;
+
+                if (logs.size() < 6) {
+                    list.add(Component.text("—" + num, Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
+                }
+            } else {
+                if (num > temp) {
+                    list.add(Component.text("▲" + num, Style.style(TextColor.color(255, 0, 0), TextDecoration.ITALIC.withState(false))));
+                } else if (num < temp) {
+                    list.add(Component.text("▼" + num, Style.style(TextColor.color(0, 0, 255), TextDecoration.ITALIC.withState(false))));
+                } else {
+                    list.add(Component.text("—" + num, Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
+                }
+                temp = num;
+            }
+            count++;
+        }
+
+        lore.addAll(list.reversed());
+
+        return lore;
+    }
 }

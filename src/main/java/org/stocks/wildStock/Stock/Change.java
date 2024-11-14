@@ -34,9 +34,9 @@ public class Change extends BukkitRunnable {
                 stock.setClosed(false);
             } else {
                 int value = (int) (Math.random() * stock.getChange()) * (((int) (Math.random() * 2) == 1) ? 1 : -1);
-                if (value <= 0) {
+                if (stock.getPrice() + value <= 0) {
                     stock.setClosed(true);
-                } else {stock.setPrice(value);}
+                } else {stock.setPrice(stock.getPrice() + value);}
             }
         }
 
@@ -48,6 +48,9 @@ public class Change extends BukkitRunnable {
 
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.playSound(p, Sound.ENTITY_PLAYER_LEVELUP,1, 1);
+            for (Stock stock : Data.stocks) {
+                p.sendMessage(Component.text(stock.isClosed()));
+            }
         }
 
     }
@@ -56,7 +59,7 @@ public class Change extends BukkitRunnable {
         if (running) {return;}
         Change task = new Change();
         running = true;
-        task.runTaskTimer(JavaPlugin.getPlugin(WildStock.class),0L,240 * 20);
+        task.runTaskTimer(JavaPlugin.getPlugin(WildStock.class),/*24*/0 * 20,240/* * 20*/);
         Price.startMode();
     }
 

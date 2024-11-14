@@ -22,6 +22,8 @@ import org.stocks.wildStock.Library.Data;
 
 import java.util.ArrayList;
 
+import static org.stocks.wildStock.Library.Data.stocks;
+
 public class Shop implements CommandExecutor, Listener {
     /*TODO 상점
     * 상점 - 세부 상점 순으로 진입
@@ -36,7 +38,7 @@ public class Shop implements CommandExecutor, Listener {
             if (commandSender instanceof Player p) {
                 Inventory inventory = Bukkit.createInventory(p, 54, Component.text("상점",
                         Style.style(TextColor.color(0, 0, 0), TextDecoration.ITALIC.withState(false))));
-                p.openInventory(inventory);
+
 
                 ItemStack money = new ItemStack(Material.SUNFLOWER);
                 ItemMeta meta = money.getItemMeta();
@@ -45,13 +47,11 @@ public class Shop implements CommandExecutor, Listener {
                 list.add(Component.text(Data.getMoney(p.getUniqueId()) + " 원", Style.style(TextColor.color(255, 191, 0), TextDecoration.ITALIC.withState(false))));
                 meta.lore(list);
                 list.clear();
-                meta.displayName(Component.text("보유 자금", Style.style(TextColor.color(0, 0, 0), TextDecoration.ITALIC.withState(false))));
+                meta.displayName(Component.text("보유 자금", Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
                 money.setItemMeta(meta);
-                inventory.setItem(5, money);
+                inventory.setItem(4, money);
 
-                //TODO meta 랑 list 는 재활용
-
-
+                p.openInventory(inventory);
                 p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BELL, 1, 1);
             }
         }

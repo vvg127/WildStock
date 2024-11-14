@@ -2,23 +2,24 @@ package org.stocks.wildStock.Library;
 
 import org.bukkit.Material;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public class Data {
 
-    private static Map<UUID, Integer> money;// 보유 자금
+    private static final Map<UUID, Integer> money = new HashMap<>();// 보유 자금
 
     public static Stock[] stocks = {
-            new Stock(50, "안정적인 주식", Material.IRON_INGOT),
-            new Stock(75, "살짝 위험한 주식", Material.GOLD_INGOT),
-            new Stock(100, "운 나쁘면 폐지되는 주식", Material.DIAMOND),
-            new Stock(150, "폐지 확률 높은 주식", Material.EMERALD)
+            new Stock(50, "이름 모를 주식", Material.IRON_INGOT),
+            new Stock(75, "엑플", Material.GOLD_INGOT),
+            new Stock(100, "슴송", Material.DIAMOND),
+            new Stock(150, "튀슬라", Material.EMERALD)
     };
 
     public static int getMoney(UUID uuid) {
         if (!money.containsKey(uuid)) {
-            throw new RuntimeException();
+            money.put(uuid, 0);
         }
         return money.get(uuid);
     }
