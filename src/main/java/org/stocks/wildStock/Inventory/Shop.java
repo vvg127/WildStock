@@ -1,4 +1,4 @@
-package org.stocks.wildStock.Commands;
+package org.stocks.wildStock.Inventory;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
@@ -22,8 +22,6 @@ import org.stocks.wildStock.Library.Data;
 
 import java.util.ArrayList;
 
-import static org.stocks.wildStock.Library.Data.stocks;
-
 public class Shop implements CommandExecutor, Listener {
     /*TODO 상점
     * 상점 - 세부 상점 순으로 진입
@@ -36,23 +34,7 @@ public class Shop implements CommandExecutor, Listener {
 
         if (command.getName().equals("shop")) {
             if (commandSender instanceof Player p) {
-                Inventory inventory = Bukkit.createInventory(p, 54, Component.text("상점",
-                        Style.style(TextColor.color(0, 0, 0), TextDecoration.ITALIC.withState(false))));
-
-
-                ItemStack money = new ItemStack(Material.SUNFLOWER);
-                ItemMeta meta = money.getItemMeta();
-                ArrayList<Component> list = new ArrayList<>();
-
-                list.add(Component.text(Data.getMoney(p.getUniqueId()) + " 원", Style.style(TextColor.color(255, 191, 0), TextDecoration.ITALIC.withState(false))));
-                meta.lore(list);
-                list.clear();
-                meta.displayName(Component.text("보유 자금", Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
-                money.setItemMeta(meta);
-                inventory.setItem(4, money);
-
-                p.openInventory(inventory);
-                p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BELL, 1, 1);
+                open(p);
             }
         }
 
@@ -62,6 +44,25 @@ public class Shop implements CommandExecutor, Listener {
     @EventHandler
     public void onClick(InventoryClickEvent e) {
 
+    }
+
+    static void open(Player p) {
+        Inventory inventory = Bukkit.createInventory(p, 54, Component.text("상점",
+                Style.style(TextColor.color(0, 0, 0), TextDecoration.ITALIC.withState(false))));
+
+        ItemStack money = new ItemStack(Material.SUNFLOWER);
+        ItemMeta meta = money.getItemMeta();
+        ArrayList<Component> list = new ArrayList<>();
+
+        list.add(Component.text(Data.getMoney(p.getUniqueId()) + " 원", Style.style(TextColor.color(255, 191, 0), TextDecoration.ITALIC.withState(false))));
+        meta.lore(list);
+        list.clear();
+        meta.displayName(Component.text("보유 자금", Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
+        money.setItemMeta(meta);
+        inventory.setItem(4, money);
+
+        p.openInventory(inventory);
+        p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BELL, 1, 1);
     }
 
 }

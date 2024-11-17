@@ -25,7 +25,7 @@ public class Stock {
     private final Map<UUID, Integer> amounts = new HashMap<>();
     private final List<Integer> logs = new ArrayList<>();
 
-    public int getChange() {return (xTen) ? change : change * 10;}
+    public int getChange() {return (xTen) ? change * 10 : change;}
 
     public void setXTen(boolean xTen) {this.xTen =xTen;}
 
@@ -41,7 +41,7 @@ public class Stock {
 
     public void setPrice(int price) {
         logs.add(this.price);
-        //if (logs.size() > 6) {logs.removeFirst();}
+        if (logs.size() > 5) {logs.removeFirst();}
         this.price = price;
     }
 
@@ -73,7 +73,9 @@ public class Stock {
         lore.add(Component.text("현재 주가 : ",
                 Style.style(TextColor.color(255, 255, 255),TextDecoration.ITALIC.withState(false))).append(text));
 
-        lore.add(Component.text("보유 주식 : " + getAmount(uuid) + "주", Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
+        lore.add(Component.text("보유 주식 : " + getAmount(uuid) + " 주", Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
+
+        lore.add(Component.text("변동폭 : " + getChange() + "%", Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
         lore.add(Component.empty());
 
         int temp = -1;
@@ -84,9 +86,11 @@ public class Stock {
             if (temp == -1) {
                 temp = num;
 
-                if (logs.size() < 6) {
+                if (logs.size() < 5) {
                     list.add(Component.text("—" + num, Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
+                    count++;
                 }
+
             } else {
                 if (num > temp) {
                     list.add(Component.text("▲" + num, Style.style(TextColor.color(255, 0, 0), TextDecoration.ITALIC.withState(false))));
@@ -96,8 +100,8 @@ public class Stock {
                     list.add(Component.text("—" + num, Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
                 }
                 temp = num;
+                count++;
             }
-            count++;
         }
 
         lore.addAll(list.reversed());

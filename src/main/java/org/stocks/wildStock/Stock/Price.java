@@ -30,7 +30,7 @@ public class Price extends BukkitRunnable {
         if (running || target <= 0) {return;}
         Price task = new Price();
         running = true;
-        task.runTaskTimerAsynchronously(JavaPlugin.getPlugin(WildStock.class),20L,20);
+        task.runTaskTimer(JavaPlugin.getPlugin(WildStock.class),20L,20);
         for (Stock stock : Data.stocks) {
             stock.setXTen(true);
         }

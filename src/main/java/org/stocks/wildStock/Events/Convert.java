@@ -51,18 +51,19 @@ public class Convert implements Listener {
         if (e.getWhoClicked() instanceof Player p) {
             Inventory in = e.getClickedInventory();
             if (in == null) {return;}
+            if (in.equals(e.getView().getTopInventory())) {return;}
 
             ItemStack item = e.getCurrentItem();
-            if (item == null || item.getItemMeta().hasEnchants()) {return;}
+            if (item == null || item.getItemMeta() == null || item.getItemMeta().hasEnchants()) {return;}
 
             if (e.getSlotType() == InventoryType.SlotType.RESULT) {return;}
 
             if (getPrice(item.getType()) != 0) {
-                e.setCancelled(true);
-                in.remove(item.getType());
                 Data.addMoney(p.getUniqueId(), getPrice(item.getType()) * item.getAmount());
                 p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BELL,1,1);
                 p.sendMessage(Component.text("계좌에 " + getPrice(item.getType()) * item.getAmount() + "원이 입금되었습니다!"));
+                in.remove(item.getType());
+                e.setCancelled(true);
             }
         }
     }

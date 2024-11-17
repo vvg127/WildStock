@@ -33,7 +33,7 @@ public class Change extends BukkitRunnable {
             if (stock.isClosed()) {
                 stock.setClosed(false);
             } else {
-                int value = (int) (Math.random() * stock.getChange()) * (((int) (Math.random() * 2) == 1) ? 1 : -1);
+                int value = (int) (Math.random() * ((float) stock.getPrice() / 100 * stock.getChange()) + 1) * (((int) (Math.random() * 2) == 1) ? 1 : -1);
                 if (stock.getPrice() + value <= 0) {
                     stock.setClosed(true);
                 } else {stock.setPrice(stock.getPrice() + value);}
