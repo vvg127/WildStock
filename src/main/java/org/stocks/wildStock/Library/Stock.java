@@ -65,6 +65,8 @@ public class Stock {
 
     public void setAmount(UUID uuid, int amount) {amounts.put(uuid, amount);}
 
+    public void addAmount(UUID uuid, int amount) {amounts.put(uuid, getAmount(uuid) + amount);}
+
     public List<Component> getLore(UUID uuid) {
         List<Component> lore = new ArrayList<>();
 

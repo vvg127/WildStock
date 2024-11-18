@@ -1,4 +1,12 @@
 package org.stocks.wildStock.Inventory;
 
-public class Update {
+import org.bukkit.scheduler.BukkitRunnable;
+
+public class Update extends BukkitRunnable {
+
+    @Override
+    public void run() {
+
+    }
+
 }

@@ -17,6 +17,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.stocks.wildStock.Library.Data;
+import org.stocks.wildStock.Library.Stock;
 import org.stocks.wildStock.WildStock;
 
 import java.util.*;
@@ -156,7 +157,16 @@ public class Buy implements Listener {
             loreI.add(Component.text("총 가격 : " + price, Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
             loreI.add(Component.empty());
 
-            loreI.add(Component.text("매수 후 남는 돈 : " + (price + Data.getMoney(p.getUniqueId())), Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
+            for (Stock stock : Data.stocks) {
+                if (item.getType() == stock.getIcon()) {
+                    if (stock.getAmount(p.getUniqueId()) >= 1) {
+                        loreI.add(Component.text("매도 후 남는 돈 : " + (Data.getMoney(p.getUniqueId()) + price), Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
+                    } else {
+                        loreI.add(Component.text("보유 주식이 부족 합니다.", Style.style(TextColor.color(180, 0, 0), TextDecoration.ITALIC.withState(false))));
+                    }
+                    break;
+                }
+            }
 
             sellM.lore(loreI);
             sellM.displayName(Component.text("매도하기", Style.style(TextColor.color(180, 0, 0), TextDecoration.ITALIC.withState(false))));
@@ -199,7 +209,6 @@ public class Buy implements Listener {
     public void onClick(InventoryClickEvent e) {
         if (e.getView().title().equals(Component.text("매수 / 매도", Style.style(TextColor.color(0, 0, 0), TextDecoration.ITALIC.withState(false))))) {
             if (e.getWhoClicked() instanceof Player p) {
-                //TODO 주식인 경우
                 e.setCancelled(true);
 
                 ItemStack item = e.getCurrentItem();
@@ -238,6 +247,31 @@ public class Buy implements Listener {
 
                     }
                     case 48: {
+                        //TODO 48이 매수  50이 매도
+                        List<Component> lore = meta.lore();
+                        if (lore == null) {return;}
+
+                        String text = PlainTextComponentSerializer.plainText().serialize(lore.get(1));
+                        int count = Integer.parseInt(text.substring(6));
+
+                        String text2 = PlainTextComponentSerializer.plainText().serialize(lore.getFirst());
+                        int price = Integer.parseInt(text2.substring(5));
+
+                        if (Data.getMoney(p.getUniqueId()) >= count * price) {
+                            Data.addMoney(p.getUniqueId(), count * price * -1);
+
+                            for (Stock stock : Data.stocks) {
+                                if (item.getType() == stock.getIcon()) {
+                                    stock.addAmount(p.getUniqueId(), count);
+                                    //TODO 메시지 출력 및 사운드 출력
+                                    break;
+                                }
+                            }
+
+                        } else {
+
+                        }
+
 
                     }
                     case 50: {
@@ -263,7 +297,8 @@ public class Buy implements Listener {
 
     }
 
-    //TODO 생각해 보니 주식 매도할 때 주식이 그만큼 없으면 lore 에 경고 메시지 떠야함  buy 쪽이랑 아래 있는거 바꿔야 함
+    /*TODO 생각해 보니 주식 매도할 때 주식이 그만큼 없으면 lore 에 경고 메시지 떠야함  buy 쪽이랑 아래 있는거 바꿔야 함
+    *  수정완 테스트 필요*/
     private void change(Inventory inventory, Player p, int amount, boolean isStock) {
         ItemStack middle = inventory.getItem(22);
         if (middle == null) {return;}
@@ -313,7 +348,17 @@ public class Buy implements Listener {
 
             sLore.set(0, Component.text(text.substring(0, 6) + count, Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
             sLore.set(1, mLore.get(2));
-            sLore.set(3, Component.text("매도 후 남는 돈 : " + (Data.getMoney(p.getUniqueId()) + (price * count)), Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
+
+            for (Stock stock : Data.stocks) {
+                if (middle.getType() == stock.getIcon()) {
+                    if (stock.getAmount(p.getUniqueId()) >= count) {
+                        sLore.set(3, Component.text("매도 후 남는 돈 : " + (Data.getMoney(p.getUniqueId()) + (price * count)), Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
+                    } else {
+                        bLore.set(3, Component.text("보유 주식이 부족 합니다.", Style.style(TextColor.color(180, 0, 0), TextDecoration.ITALIC.withState(false))));
+                    }
+                    break;
+                }
+            }
 
             sMeta.lore(sLore);
             sell.setItemMeta(sMeta);
