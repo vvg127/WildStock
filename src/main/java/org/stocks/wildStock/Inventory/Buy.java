@@ -263,18 +263,52 @@ public class Buy implements Listener {
                             for (Stock stock : Data.stocks) {
                                 if (item.getType() == stock.getIcon()) {
                                     stock.addAmount(p.getUniqueId(), count);
-                                    //TODO 메시지 출력 및 사운드 출력
+                                    p.sendMessage(Component.text(stock.getName() + " 주식을 " + count +"주 매입했습니다.",
+                                            Style.style(TextColor.color(0, 255, 0), TextDecoration.ITALIC.withState(false))));
+                                    p.playSound(p, Sound.ENTITY_VILLAGER_YES, 1, 1);
+                                    StockMenu.open(p);
                                     break;
                                 }
                             }
 
                         } else {
-
+                            p.sendMessage(Component.text("돈이 부족합니다.",
+                                    Style.style(TextColor.color(180, 0, 0), TextDecoration.ITALIC.withState(false))));
+                            p.playSound(p, Sound.ENTITY_VILLAGER_HURT, 1, 1);
                         }
-
-
                     }
                     case 50: {
+                        List<Component> lore = meta.lore();
+                        if (lore == null) {return;}
+
+                        String text = PlainTextComponentSerializer.plainText().serialize(lore.get(1));
+                        int count = Integer.parseInt(text.substring(6));
+
+                        String text2 = PlainTextComponentSerializer.plainText().serialize(lore.getFirst());
+                        int price = Integer.parseInt(text2.substring(5));
+
+
+                        for (Stock stock : Data.stocks) {
+                            if (item.getType() == stock.getIcon()) {
+
+                                if (stock.getAmount(p.getUniqueId()) >= count) {
+                                    Data.addMoney(p.getUniqueId(), count * price);
+
+                                    stock.addAmount(p.getUniqueId(), count * -1);
+                                    p.sendMessage(Component.text(stock.getName() + " 주식을 " + count +"주 매도했습니다.",
+                                            Style.style(TextColor.color(0, 255, 0), TextDecoration.ITALIC.withState(false))));
+                                    p.playSound(p, Sound.ENTITY_VILLAGER_YES, 1, 1);
+                                    StockMenu.open(p);
+
+                                } else {
+                                    p.sendMessage(Component.text("주식이 부족합니다.",
+                                            Style.style(TextColor.color(180, 0, 0), TextDecoration.ITALIC.withState(false))));
+                                    p.playSound(p, Sound.ENTITY_VILLAGER_HURT, 1, 1);
+                                }
+
+                                break;
+                            }
+                        }
 
                     }
 

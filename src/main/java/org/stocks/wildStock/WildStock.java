@@ -25,6 +25,7 @@ public final class WildStock extends JavaPlugin {
         getCommand("stock").setExecutor(new StockMenu());
         getCommand("shop").setExecutor(new Shop());
         getCommand("pause").setExecutor(new Pause());
+
     }
 
     @Override
