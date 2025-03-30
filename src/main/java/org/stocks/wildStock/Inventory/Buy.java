@@ -32,29 +32,25 @@ public class Buy implements Listener {
         this.plugin = plugin;
     }
 
+    /* TODO isStock 쓸 바에는 차라리 오버로딩해서 하는게 나을 듯
+    *   쨋든 뜯어 고쳐아 함
+    *
+    *
+    * */
     static void buy(Player p, ItemStack item, int price, boolean isStock) {
-        String nameIn;
+        String nameInven;
         if (isStock) {
-            nameIn = "매수 / 매도";
-        } else {nameIn = "구매";}
+            nameInven = "매수 / 매도";
+        } else {nameInven = "구매";}
 
-        Inventory inventory = Bukkit.createInventory(p, 54, Component.text(nameIn,
+        Inventory inventory = Bukkit.createInventory(p, 54, Component.text(nameInven,
                 Style.style(TextColor.color(0, 0, 0), TextDecoration.ITALIC.withState(false))));
 
-        ItemStack money = new ItemStack(Material.SUNFLOWER);
-        ItemMeta moneyMeta = money.getItemMeta();
-        ArrayList<Component> list = new ArrayList<>();
-
-        list.add(Component.text(Data.getMoney(p.getUniqueId()) + " 원", Style.style(TextColor.color(255, 191, 0), TextDecoration.ITALIC.withState(false))));
-        moneyMeta.lore(list);
-        list.clear();
-        moneyMeta.displayName(Component.text("보유 자금", Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
-        money.setItemMeta(moneyMeta);
-        inventory.setItem(4, money);
+        inventory.setItem(4, Icon.getMoneyIcon(p));
 
         /*TODO 구매 화면 아이템 정보
         *  PlainTextComponentSerializer.plainText().serialize(component);를 쓰면 component 를 String 으로 바꿔줌!
-        *  여기는 처음 한 번만 실행되는 거니 1로 해도 ㄱㅊ!
+        *  여기는 처음 한 번만 실행되는 거니 1로 해도 ㄱㅊ! --> Icon 에서 기본값 설정 예정. 일반화 가능
         *  혹시 오류 생기면 인스턴스 변수 amount 만들어서 고치셈
         * */
         ItemMeta meta = item.getItemMeta();
@@ -217,13 +213,6 @@ public class Buy implements Listener {
                 ItemMeta meta = item.getItemMeta();
 
                 switch (e.getSlot()) {
-                    case 4: {
-                        p.sendMessage(Component.text("현재 소지 중인 돈 : " + Data.getMoney(p.getUniqueId()),
-                                Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
-                        p.playSound(p, Sound.BLOCK_CHAIN_PLACE, 1, 1);
-                        break;
-
-                    }
                     case 8: {
                         StockMenu.open(p);
                         break;

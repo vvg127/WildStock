@@ -19,11 +19,12 @@ public class Stock {
     private final int change;
     private final String name;
     private final Material icon;
+    private final Map<UUID, Integer> amounts = new HashMap<>();
+    private final Queue<String> logs = new LinkedList<>();
+
     private int price = 1000;
     private boolean xTen = false;
     private boolean closed = false;
-    private final Map<UUID, Integer> amounts = new HashMap<>();
-    private final List<Integer> logs = new ArrayList<>();
 
     public int getChange() {return (xTen) ? change * 10 : change;}
 
@@ -40,8 +41,11 @@ public class Stock {
     public int getPrice() {return price;}
 
     public void setPrice(int price) {
-        logs.add(this.price);
-        if (logs.size() > 5) {logs.removeFirst();}
+        if (logs.size() >= 5) {
+            logs.poll();
+        }
+        int compare = ((LinkedList<String>) logs).peekLast() != null ? this.price - Integer.parseInt(((LinkedList<String>) logs).peekLast().substring(2)) : 0;
+        logs.offer((compare > 0) ? "▲ " + this.price : (compare < 0) ? "▼ " + this.price : "— " + this.price);
         this.price = price;
     }
 
@@ -80,33 +84,17 @@ public class Stock {
         lore.add(Component.text("변동폭 : " + getChange() + "%", Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
         lore.add(Component.empty());
 
-        int temp = -1;
-        int count = 0;
-        List<Component> list = new ArrayList<>();
-        for (int num : logs) {
-            if (count == 5) {break;}
-            if (temp == -1) {
-                temp = num;
+        lore.add(Component.text("기록 :", Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
 
-                if (logs.size() < 5) {
-                    list.add(Component.text("—" + num, Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
-                    count++;
-                }
-
+        for (String priceT : logs) {
+            if (priceT.contains("▲")) {
+                lore.add(Component.text(priceT, Style.style(TextColor.color(255, 0, 0), TextDecoration.ITALIC.withState(false))));
+            } else if (priceT.contains("▼")) {
+                lore.add(Component.text(priceT, Style.style(TextColor.color(0, 0, 255), TextDecoration.ITALIC.withState(false))));
             } else {
-                if (num > temp) {
-                    list.add(Component.text("▲" + num, Style.style(TextColor.color(255, 0, 0), TextDecoration.ITALIC.withState(false))));
-                } else if (num < temp) {
-                    list.add(Component.text("▼" + num, Style.style(TextColor.color(0, 0, 255), TextDecoration.ITALIC.withState(false))));
-                } else {
-                    list.add(Component.text("—" + num, Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
-                }
-                temp = num;
-                count++;
+                lore.add(Component.text(priceT, Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
             }
         }
-
-        lore.addAll(list.reversed());
 
         return lore;
     }

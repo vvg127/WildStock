@@ -1,4 +1,4 @@
-package org.stocks.wildStock.Stock;
+package org.stocks.wildStock.Updater;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -7,6 +7,7 @@ import org.stocks.wildStock.Library.Stock;
 import org.stocks.wildStock.WildStock;
 
 public class Price extends BukkitRunnable {
+    //TODO  뜯어 고치셈
 
     private static int target;
     private static boolean running;

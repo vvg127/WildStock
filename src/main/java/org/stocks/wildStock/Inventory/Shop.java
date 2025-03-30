@@ -24,9 +24,9 @@ import java.util.ArrayList;
 
 public class Shop implements CommandExecutor, Listener {
     /*TODO 상점
-    * 상점 - 세부 상점 순으로 진입
-    * 초고속 모드 (임시) , 고배율 모드 (임시) 모두 지속 시간 기본 3분
-    * 추가 구매 시 지속 시간 연장
+    *  상점 - 세부 상점 순으로 진입
+    *  초고속 모드 (임시) , 고배율 모드 (임시) 모두 지속 시간 기본 3분
+    *  추가 구매 시 지속 시간 연장
     * */
 
     @Override
@@ -50,16 +50,7 @@ public class Shop implements CommandExecutor, Listener {
         Inventory inventory = Bukkit.createInventory(p, 54, Component.text("상점",
                 Style.style(TextColor.color(0, 0, 0), TextDecoration.ITALIC.withState(false))));
 
-        ItemStack money = new ItemStack(Material.SUNFLOWER);
-        ItemMeta meta = money.getItemMeta();
-        ArrayList<Component> list = new ArrayList<>();
-
-        list.add(Component.text(Data.getMoney(p.getUniqueId()) + " 원", Style.style(TextColor.color(255, 191, 0), TextDecoration.ITALIC.withState(false))));
-        meta.lore(list);
-        list.clear();
-        meta.displayName(Component.text("보유 자금", Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
-        money.setItemMeta(meta);
-        inventory.setItem(4, money);
+        inventory.setItem(4, Icon.getMoneyIcon(p));
 
         p.openInventory(inventory);
         p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BELL, 1, 1);

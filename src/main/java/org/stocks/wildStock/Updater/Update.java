@@ -1,4 +1,4 @@
-package org.stocks.wildStock.Inventory;
+package org.stocks.wildStock.Updater;
 
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

@@ -49,10 +49,8 @@ public class StockMenu implements CommandExecutor, Listener {
                 if (item == null || e.getClickedInventory() == null) {return;}
                 if (e.getClickedInventory().equals(e.getView().getBottomInventory())) {return;}
 
-                if (item.getType() == Material.SUNFLOWER) {
-                    p.sendMessage(Component.text("현재 소지 중인 돈 : " + Data.getMoney(p.getUniqueId()),
-                            Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
-                    p.playSound(p, Sound.BLOCK_CHAIN_PLACE, 1, 1);
+                if (item.getType() == Material.BARRIER) {
+                    p.playSound(p, Sound.BLOCK_ANVIL_LAND, 1, 1);
 
                 } else if (item.getType() == Data.stocks[0].getIcon()) {
                     Buy.buy(p, item, Data.stocks[0].getPrice(), true);
@@ -70,8 +68,6 @@ public class StockMenu implements CommandExecutor, Listener {
                     Buy.buy(p, item, Data.stocks[3].getPrice(), true);
                     p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BELL, 1, 1);
 
-                } else if (item.getType() == Material.BARRIER) {
-                    p.playSound(p, Sound.BLOCK_ANVIL_LAND, 1, 1);
                 }
 
             }
@@ -82,36 +78,27 @@ public class StockMenu implements CommandExecutor, Listener {
         Inventory inventory = Bukkit.createInventory(p, 54, Component.text("주식",
                 Style.style(TextColor.color(0, 0, 0), TextDecoration.ITALIC.withState(false))));
 
-        ItemStack money = new ItemStack(Material.SUNFLOWER);
-        ItemMeta meta = money.getItemMeta();
-        ArrayList<Component> list = new ArrayList<>();
-
-        list.add(Component.text(Data.getMoney(p.getUniqueId()) + " 원", Style.style(TextColor.color(255, 191, 0), TextDecoration.ITALIC.withState(false))));
-        meta.lore(list);
-        list.clear();
-        meta.displayName(Component.text("보유 자금", Style.style(TextColor.color(255, 255, 255), TextDecoration.ITALIC.withState(false))));
-        money.setItemMeta(meta);
-        inventory.setItem(4, money);
+        inventory.setItem(4, Icon.getMoneyIcon(p));
 
         int slot = 19;
         for (Stock stock : Data.stocks) {
             ItemStack item = new ItemStack(stock.getIcon());
-            ItemMeta metaS = item.getItemMeta();
+            ItemMeta meta = item.getItemMeta();
 
             if (stock.isClosed()) {
-                metaS.displayName(Component.text("상장 폐지된 주식입니다.", Style.style(TextColor.color(255, 0,0), TextDecoration.ITALIC.withState(false))));
+                meta.displayName(Component.text("상장 폐지된 주식입니다.", Style.style(TextColor.color(255, 0,0), TextDecoration.ITALIC.withState(false))));
                 item = new ItemStack(Material.BARRIER);
 
                 List<Component> lore = new ArrayList<>();
                 lore.add(Component.text("상장 폐지된 주식입니다.", Style.style(TextColor.color(255, 0,0), TextDecoration.ITALIC.withState(false))));
 
-                metaS.lore(lore);
+                meta.lore(lore);
             } else {
-                metaS.displayName(stock.getComponent());
-                metaS.lore(stock.getLore(p.getUniqueId()));
+                meta.displayName(stock.getComponent());
+                meta.lore(stock.getLore(p.getUniqueId()));
             }
 
-            item.setItemMeta(metaS);
+            item.setItemMeta(meta);
             inventory.setItem(slot, item);
             slot += 2;
         }
