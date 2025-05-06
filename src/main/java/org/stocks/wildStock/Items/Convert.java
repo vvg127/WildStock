@@ -1,4 +1,4 @@
-package org.stocks.wildStock.Events;
+package org.stocks.wildStock.Items;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;

@@ -1,6 +1,8 @@
 package org.stocks.wildStock.Library;
 
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.stocks.wildStock.WildStock;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,5 +35,18 @@ public class Data {
     //TODO 세이브, 로드 메서드 미구현
     public static void save() {}
     public static void load() {}
+
+    private static final NamespacedKey keyAmount = new NamespacedKey(WildStock.getInstance(), "amount");
+    private static final NamespacedKey keyType = new NamespacedKey(WildStock.getInstance(), "goods_type");
+    private static final NamespacedKey keyStock = new NamespacedKey(WildStock.getInstance(), "stock_index");
+
+    private static final NamespacedKey keyShop = new NamespacedKey(WildStock.getInstance(), "shop_type");
+    private static final NamespacedKey keyAbleToSell = new NamespacedKey(WildStock.getInstance(), "able_to_sell");
+
+    public static NamespacedKey getKeyAmount() {return keyAmount;}
+    public static NamespacedKey getKeyStock() {return keyStock;}
+    public static NamespacedKey getKeyType() {return keyType;}
+
+
 
 }
